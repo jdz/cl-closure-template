@@ -124,12 +124,12 @@
 
 (define-rule simple-name (and alpha-char (* (or alphanumeric #\_ )))
   (:text t))
-  
+
 (define-rule dotref (or (and #\. simple-name)
                     (and "['" simple-name "']"))
   (:lambda (list)
     (list :dot (lispify-name (second list)))))
-  
+
 (define-rule aref (or (and #\[ expression #\])
                   (and #\. integer))
   (:lambda (list)
@@ -176,7 +176,7 @@
                     (subseq sequence (+ start length))))
 
 (defun reduce-ref (expr)
-  (let* ((pos (position-if #'(lambda (i) 
+  (let* ((pos (position-if #'(lambda (i)
                                (and (consp i)
                                     (not (third i))
                                     (member (car i) '(elt :dot))))
@@ -245,7 +245,7 @@
       and or
       ? |:|))
 
-(defparameter *infix-ops-priority* 
+(defparameter *infix-ops-priority*
   '(* / rem
     + -
     < > <= >=
@@ -262,7 +262,7 @@
        (replace-subseq infix 0 2
                        (list '-
                              (second infix))))
-   
+
    ;;?: ternary
    (let* ((pos1 (position '? infix))
           (pos2 (if pos1 (position '|:| infix :start pos1)))
@@ -273,7 +273,7 @@
                                (->prefix (subseq infix 0 pos1))
                                (->prefix (subseq infix (1+ pos1) pos2))
                                (->prefix (subseq infix (1+ pos2)))))))
-   
+
    ;; binary and unary
    (let* ((pos (iter (for op in *infix-ops-priority*)
                      (for pos = (position op infix))
@@ -283,13 +283,13 @@
      (if pos
          (cond
            ((eql op 'not)
-            (replace-subseq infix pos 2 
-                            (list 'not 
+            (replace-subseq infix pos 2
+                            (list 'not
                                   (elt infix (+ pos 1)))))
            (t
             (replace-subseq infix (- pos 1) 3
                             (list op
-                                  (elt infix (- pos 1)) 
+                                  (elt infix (- pos 1))
                                   (elt infix (+ pos 1))))))))))
 
 (defun ->prefix (infix)
@@ -378,7 +378,7 @@
   (:destructure (w1 d w2 i value w3)
     (declare (ignore w1 d w2 i w3))
     (list :insert-word-breaks value)))
-  
+
 (define-rule print-directive (or no-autoescape-d id-d escape-html-d escape-uri-d escape-js-d insert-word-breaks-d))
 
 (define-rule print-tag (and (or "{print " "{")  expression (* print-directive) "}")
@@ -468,11 +468,11 @@
                         (* whitespace) ")")
   (:destructure (start w1 lb args w2 rb)
     (declare (ignore start w1 lb w2 rb))
-    (cons :range    
+    (cons :range
           (remove nil
                   (cons (first args)
                         (mapcar #'second (cdr args)))))))
-        
+
 
 (define-rule for (and "{for" (+ whitespace) variable (+ whitespace) "in"
                       (+ whitespace) range (* whitespace) "}"
@@ -523,7 +523,7 @@
     (if (consp name)
         (second name)
         name)))
-                
+
 (define-rule short-call (and "{call" whitespace call-template-name (? call-data) (? whitespace) "/}")
   (:destructure (start w1 name data w2 end)
     (declare (ignore start w1 w2 end))
@@ -538,7 +538,7 @@
 (define-rule call (or short-call full-call))
 
 ;;; code-block
-        
+
 (define-rule code-block
     (+ (or substition
            literal
@@ -569,7 +569,7 @@
        (or (keywordp (car obj))
            (find (car obj)
                  '(- not + * / rem > < >= <= equal not-equal and or if)))))
-     
+
 (defun text-neighboring-strings (obj)
   (if (and (consp obj)
            (not (check-expression-p obj)))
@@ -632,8 +632,8 @@
                  traits
                  (simplify-code code))
           (list 'template traits)))))
-                
-;;; toplevel 
+
+;;; toplevel
 
 (define-rule toplevel (and (? (and (* (or comment whitespace)) namespace))
                            (* (or comment whitespace template)))
@@ -643,9 +643,9 @@
            (iter (for item in items)
                  (when (and (consp item) (eql (car item) 'template))
                    (collect item))))))
-  
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; parse 
+;;; parse
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun closure-template-parse (symbol text)

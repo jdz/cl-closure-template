@@ -129,7 +129,7 @@
                         `(if ,digits-after-point
                              (let ((factor (expt 10.0 ,digits-after-point)))
                                (/ (round (* ,number factor)) factor))
-                             (round ,number))))             
+                             (round ,number))))
              ,body)
            (unless $$template-output$$
              (funcall (ps:@ $template-output$ join) ""))))))
@@ -145,7 +145,7 @@
 (defmethod translate-named-item ((backend javascript-backend) (item (eql 'closure-template.parser:literal)) args)
   (list (list'ps:@ *js-print-target* 'push)
         (car args)))
-        
+
 (defmethod translate-named-item ((backend javascript-backend) (item (eql 'closure-template.parser:foreach)) args)
   (let* ((loop-var (make-symbol (string-upcase (second (first (first args))))))
          (*local-variables* (cons loop-var

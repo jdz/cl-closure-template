@@ -15,7 +15,7 @@
 
 (defgeneric translate-named-item (backend item args)
   (:method(backend item args)))
-   
+
 
 (defgeneric backend-print (backend expr &optional directives))
 
@@ -74,4 +74,3 @@
                          ((getf (cdr args) :escape-html) :escape-html)
                          ((getf (cdr args) :escape-uri) :escape-uri)
                          ((getf (cdr args) :escape-js) :escape-js)))))
-

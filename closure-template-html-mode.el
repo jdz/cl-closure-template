@@ -65,7 +65,7 @@
           (1+ space)
           (group (1+ (not space)))
           (0+ (: (1+ space) (1+ (not (any space "}")))))
-          (0+ space)          
+          (0+ space)
           "}")
      (1 closure-template-tag-face)
      (2 font-lock-function-name-face))
@@ -79,7 +79,7 @@
   `((,(rx "$"
           (group (1+ (or word "."))))
      (1 font-lock-variable-name-face))))
-          
+
 
 (defvar *closure-template-substition-keywords*
   `((,(rx (or "{sp}"
@@ -121,7 +121,7 @@
           (group (or "/if" "else" "/switch" "default"))
           "}")
      (1 closure-template-tag-face))))
-     
+
 (defun closure-template-html-font-lock-keywords-3 ()
   (append *closure-template-comment-keywords*
           *closure-template-namespace-keywords*
@@ -253,14 +253,14 @@
                                  sgml-basic-offset)))
       (closed (indent-line-to (second ind)))
       ((nil) (indent-sgml-in-closure)))))
-       
+
 
 (defun indent-closure-close ()
   (let ((prev (closure-previous-indent)))
     (case (first prev)
       (opened (indent-line-to (second prev)))
       (otherwise (indent-line-to (- (second prev) sgml-basic-offset))))))
-          
+
 (defun closure-indent-line ()
   (interactive)
   (cond
@@ -306,4 +306,3 @@
 
 
 (provide 'closure-template-html-mode)
-
