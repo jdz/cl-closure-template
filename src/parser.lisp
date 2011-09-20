@@ -515,7 +515,8 @@
 
 (define-rule call-data (or call-data-all call-data-expr))
 
-(define-rule template-name (and alpha-char (*  (or alphanumeric #\_ #\-)))
+(define-rule template-name (and (or alpha-char #\.)
+                                (* (or alphanumeric #\_ #\-)))
   (:text t))
 
 (define-rule call-template-name (or (and "name=\"" expression "\"") template-name)
